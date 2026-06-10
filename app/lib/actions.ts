@@ -35,7 +35,7 @@ export type State = {
 const CreateInvoice = FormSchema.omit({id: true, date: true})
 const UpdateInvoice = FormSchema.omit({id: true, date: true})
 
-export async function createInvoice(prevState: State, formData: FormData) {
+export async function createInvoice(id: string, prevState: State, formData: FormData) {
 	// validate form using zod
 	const validatedFields = CreateInvoice.safeParse({
 		customerId: formData.get("customerId"),
@@ -75,7 +75,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
 	redirect("/dashboard/invoices")
 }
 
-export async function updateInvoice(prevState: State, id: string, formData: FormData){
+export async function updateInvoice(id: string, formData: FormData){
 	const validatedFields = UpdateInvoice.safeParse({
 		customerId: formData.get("customerId"),
 		amount: formData.get("amount"),
@@ -113,10 +113,7 @@ export async function deleteInvoice(id: string){
 		await sql`DELETE FROM invoices WHERE id=${id}`;
 	}
 	catch (e){
-		console.error(e)
-		return {
-			message: "Database Error: failed to delete invoice"
-		}
+		console.error("Database Error: failed to delete invoice", e)
 	}
 	revalidatePath('/dashboard/invoices')
 }
