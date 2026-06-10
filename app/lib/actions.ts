@@ -87,7 +87,7 @@ export async function updateInvoice(prevState: State, id: string, formData: Form
 		}
 	}
 
-	const { customerId, amount, status } = validatedFields
+	const { customerId, amount, status } = validatedFields.data
 	const amountInCents = amount * 100;
 	try {
 		await sql`
